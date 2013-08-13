@@ -1,0 +1,33 @@
+{
+  "name": "hanson",
+  "version": "0.0.3",
+  "description": "HanSON is JSON with multiline strings and comments. Includes parser and converter.",
+  "main": "hanson.js",
+  "scripts": {
+    "test": "mocha hanson-test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timjansen/hanson.git"
+  },
+  "keywords": [
+    "json",
+    "hanson"
+  ],
+  "author": "Tim Jansen",
+  "licenses": [
+    {
+      "type": "Public Domain",
+      "url": "http://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  ],
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "mocha": "~1.12.0"
+  },
+  "preferGlobal": "true",
+  "bin": {
+    "hanson": "hansoncmd.js"
+  },
+  "homepage": "https://github.com/timjansen/hanson"
+}
