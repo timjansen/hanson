@@ -1,6 +1,6 @@
 /*
- * hanson-test.js - Tests for hanson.js
- * https://github.com/timjansen/HandSON
+ * hanson-test.js - Tests for hanson.js. 
+ * https://github.com/timjansen/handson
  */
 var assert = require("assert");
 var hanson = require("./hanson.js");

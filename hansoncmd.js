@@ -3,9 +3,9 @@
  * hanson.js - Command line tool for HanSON
  * 
  * Public Domain. Use, modify and distribute it any way you like. No attribution required.
- * http://unlicense.org/
- *
  * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+ * For details, see LICENSE or http://unlicense.org/
+ *
  *
  * To convert a single file, just write
  *   handson input.hson output.json
@@ -16,7 +16,7 @@
  * Use the -l option to keep line numbers by inserting spaces into the resulting JSON file:
  *   handson -l input.hson output.json
  * 
- * https://github.com/timjansen/HanSON
+ * https://github.com/timjansen/hanson
  */
 
 var fs = require("fs");

@@ -2,7 +2,8 @@
  * hanson.js - Parser library for HanSON
  * 
  * Public Domain. Use, modify and distribute it any way you like. No attribution required.
- * http://unlicense.org/
+ * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+ * For details, see LICENSE or http://unlicense.org/
  *
  * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
  *
@@ -30,7 +31,7 @@
  * Note that the current implementation of stringify() will write a JSON string without using any HanSON features.
  * This may change in future implementations. 
  * 
- * https://github.com/timjansen/HanSON
+ * https://github.com/timjansen/hanson
  */
 (function(target) {
 	
