@@ -87,6 +87,7 @@ function printHelp(extraMsg) {
 	console.log();
 	console.log('Options: -l : keep line numbers in output files (adds empty lines)');
 	console.log('         -m : multi-input files. Will write .json file for each.');
+	console.log();
 	process.exit(1);
 }
 
