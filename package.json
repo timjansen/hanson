@@ -25,7 +25,6 @@
   "devDependencies": {
     "mocha": "~1.12.0"
   },
-  "preferGlobal": "true",
   "bin": {
     "hanson": "hansoncmd.js"
   },
