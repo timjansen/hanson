@@ -21,15 +21,15 @@ you can not easily have strings with several lines; and you can not include comm
 
 HanSON is an extension of JSON that fixes those shortcomings with three simple additions to the JSON spec:
 * quotes for strings are optional if they follow JavaScript identifier rules.
-* you can alternately use triple quotes for strings. A triple-quoted string may span several lines
+* you can alternatively use triple quotes for strings. A triple-quoted string may span several lines
   and you are not required to escape quote characters, unless you need three of them. Backslashes still
   need to be escaped, and all other backslash-escape sequences work like in regular JSON.
 * you can use JavaScript comments, both single line (//) and multi-line comments (/* */), in all places where JSON allows whitespace. 
   
   
   
-Example
---------
+Example HanSON
+---------------
 ```js
 {
   listName: "Sesame Street Monsters", // note that listName needs no quotes
@@ -52,7 +52,7 @@ He's mostly retired today."""
   
 Converting HanSON to JSON
 ----------------------------
-*hanson* is a simple command-line converter that will convert HanSON files to JSON. 
+*hanson* is a command-line converter that will convert HanSON files to JSON. 
 It is a Nodes.js package that can be installed using npm:
 > npm install -g hanson
 
