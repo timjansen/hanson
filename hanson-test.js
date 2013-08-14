@@ -10,12 +10,19 @@ describe('toJSON()', function() {
 	it('does not touch regular JSON', function() {
 		var a;
 		assert.equal(toJSON(a = "[1,2, 3]"), a);
-		assert.equal(toJSON(a = '[true, null, false, "null", ""]'), a);
+		assert.equal(toJSON(a = '[true, null, false, "null", "", ",", ", ]"]'), a);
 		assert.equal(toJSON(a = '"\""'), a);
 		assert.equal(toJSON(a = '"\\"'), a);
 		assert.equal(toJSON(a = '"\\\""'), a);
 		assert.equal(toJSON(a = '"\\t\\\\\\\""'), a);
 		assert.equal(toJSON(a = '{"a": "b", "c": ["a", "b\\nc"]}'), a);
+ 	});
+	
+	it('removes commas at the end of a list/object', function() {
+		assert.equal(toJSON("[1, 2, 3, ]"), "[1, 2, 3 ]");
+		assert.equal(toJSON("[1, 2, 3,]"), "[1, 2, 3]");
+		assert.equal(toJSON("[1, 2, 3,\n]"), "[1, 2, 3\n]");
+		assert.equal(toJSON('{"a":1, "b":2,}'), '{"a":1, "b":2}');
  	});
 	
 	it('ignores singleline comments', function() {
@@ -75,8 +82,8 @@ describe('toJSON()', function() {
  	});
 	
 	it('mixed input', function() {
-		assert.equal(toJSON('{a: 1, """b"b""": c2$, /**/c:/*x*/d_, d: [true, null], "e": false, "f"://bla\n "g\\n\\t\\\\h"}//x'), 
-					        '{"a": 1, "b\\"b": "c2$", "c":"d_", "d": [true, null], "e": false, "f": "g\\n\\t\\\\h"}');
+		assert.equal(toJSON('{a: 1, """b"b""": c2$, /**/c:/*x*/d_, d: [true, null,], "e": false, "f"://bla\n "g\\n\\t\\\\h" , }//x'), 
+					        '{"a": 1, "b\\"b": "c2$", "c":"d_", "d": [true, null], "e": false, "f": "g\\n\\t\\\\h"  }');
  	});
 	
 	it('keeps lines', function() {

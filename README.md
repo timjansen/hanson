@@ -7,6 +7,7 @@ In Short
 * Comments use JavaScript syntax (//, /**/).
 * Multi-line strings are triple-quoted like in Python: they start and end with """.
 * Property names do not require quotes if they are valid JavaScript identifiers.
+* Commas after the last list element or property will be ignored.
 * Every JSON string is valid HanSON.
 * HanSON can easily be converted to real JSON. 
 
@@ -22,12 +23,13 @@ you can not easily have strings with several lines; and you can not include comm
 HanSON is an extension of JSON that fixes those shortcomings with three simple additions to the JSON spec:
 * quotes for strings are optional if they follow JavaScript identifier rules.
 * you can alternatively use triple quotes for strings. A triple-quoted string may span several lines
-  and you are not required to escape quote characters, unless you need three of them. Backslashes still
+  and you are not required to escape individual quote characters. Backslashes still
   need to be escaped, and all other backslash-escape sequences work like in regular JSON.
-* you can use JavaScript comments, both single line (//) and multi-line comments (/* */), in all places where JSON allows whitespace. 
+* you can use JavaScript comments, both single line (//) and multi-line comments (/* */), in all places where JSON allows whitespace.
+* A comma after the last list element or object property will be ignored. 
   
   
-  
+
 Example HanSON
 ---------------
 ```js
@@ -44,7 +46,7 @@ These days he is forced to eat "healthy" food."""
       name: "Herry Monster",
       background: """Herry Monster is a furry blue monster with a purple nose.
 He's mostly retired today."""
-    }
+    },    // don't worry, the trailing comma will be ignored
    ]
 }
 ```
@@ -110,9 +112,9 @@ HanSON to JSON. It returns a JSON string that can be read using JSON.parse().
 
 ```js
 function toJSON(input) {
-	return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|"""([^]*?(?:\\"""|[^"]""|[^"]"|\\\\|[^\\"]))"""|"""("?"?)"""|"(?:\\.|[^"])*"|\/\*[^]*?\*\/|\/\/.*\n?/g, 
-	  function(s, identifier, tripleQuoted, tripleQuotedShort) {
-		if (s.charAt(0) == '/')
+	return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|"""([^]*?(?:\\"""|[^"]""|[^"]"|\\\\|[^\\"]))"""|"""("?"?)"""|"(?:\\.|[^"])*"|(,)(?=\s*[}\]])|\/\*[^]*?\*\/|\/\/.*\n?/g, 
+ 	  function(s, identifier, tripleQuoted, tripleQuotedShort, lonelyComma) {
+		if (s.charAt(0) == '/' || lonelyComma)
 			return '';
 		else if (identifier != null)
 				return '"' + identifier + '"';

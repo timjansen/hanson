@@ -43,9 +43,9 @@
 	// if keepLineNumbers is set, toJSON() tried not to modify line numbers, so a JSON parser's
 	// line numbers in error messages will still make sense.
 	function toJSON(input, keepLineNumbers) {
-		return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|"""([^]*?(?:\\"""|[^"]""|[^"]"|\\\\|[^\\"]))"""|"""("?"?)"""|"(?:\\.|[^"])*"|\/\*[^]*?\*\/|\/\/.*\n?/g, 
-							 function(s, identifier, tripleQuoted, tripleQuotedShort) {
-			if (s.charAt(0) == '/')
+		return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|"""([^]*?(?:\\"""|[^"]""|[^"]"|\\\\|[^\\"]))"""|"""("?"?)"""|"(?:\\.|[^"])*"|(,)(?=\s*[}\]])|\/\*[^]*?\*\/|\/\/.*\n?/g, 
+							 function(s, identifier, tripleQuoted, tripleQuotedShort, lonelyComma) {
+			if (s.charAt(0) == '/' || lonelyComma)
 				return keepLineNumbers ? extractLineFeeds(s) : '';
 			else if (identifier != null)
 					return '"' + identifier + '"';
