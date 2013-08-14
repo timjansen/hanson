@@ -43,19 +43,19 @@
 	// if keepLineNumbers is set, toJSON() tried not to modify line numbers, so a JSON parser's
 	// line numbers in error messages will still make sense.
 	function toJSON(input, keepLineNumbers) {
-		return input.replace(/[a-zA-Z_$][\w_$]*|"""([^]*?(?:\\"""|[^"]""|[^"]"|\\\\|[^\\"]))"""|"""("?"?)"""|"([^"]|\\")*"|\/\*[^]*?\*\/|\/\/.*\n?/g, 
-							 function(s, tripleQuoted, tripleQuotedShort, singleQuoted) {
+		return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|"""([^]*?(?:\\"""|[^"]""|[^"]"|\\\\|[^\\"]))"""|"""("?"?)"""|"(?:\\.|[^"])*"|\/\*[^]*?\*\/|\/\/.*\n?/g, 
+							 function(s, identifier, tripleQuoted, tripleQuotedShort) {
 			if (s.charAt(0) == '/')
 				return keepLineNumbers ? extractLineFeeds(s) : '';
+			else if (identifier != null)
+					return '"' + identifier + '"';
 			else if (tripleQuoted != null || tripleQuotedShort != null) {
 				var t = tripleQuoted != null ? tripleQuoted : tripleQuotedShort;
 				return '"' + t.replace(/\\./g, function(s) { return s == '\\"' ? '"' : s; }).replace(/\n/g, '\\n').replace(/"/g, '\\"') +
 				       '"' + (keepLineNumbers ? extractLineFeeds(s) : '');
 			}
-			else if (singleQuoted != null)
-				return s;
 			else 
-				return '"' + s + '"';
+				return s;
 		});
 	}
 	

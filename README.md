@@ -16,10 +16,10 @@ Intro
 ------
 JSON is a great and very simple data format, especially if you are working with JavaScript. Increasingly configuration 
 files are written in JSON, and often it is used as a simpler alternative to XML. Unfortunately, when you are creating
-larger JSON files by hand, you will notice three shortcomings in JSON: you need to quote all strings, even object keys; 
+larger JSON files by hand, you will notice some shortcomings in JSON: you need to quote all strings, even object keys; 
 you can not easily have strings with several lines, and you can not include comments. 
 
-HanSON is an extension of JSON that fixes those shortcomings with three simple additions:
+HanSON is an extension of JSON that fixes those shortcomings with three simple additions to the JSON spec:
 * quotes for strings are optional if they follow JavaScript identifier rules.
 * you can alternately use triple quotes for strings. A triple-quoted string may span several lines
   and you are not required to escape quote characters, unless you need three of them. Backslashes still
@@ -87,8 +87,8 @@ How Can You Use HanSON?
 --------------------------
 * If you have configuration or descriptor files (like package.json), you can write them using HanSON and convert them 
   with the command line tool or Grunt task.
-* I am using HanSON for a template system to generate static HTML pages. Just write a small script that accepts 
-  HanSON and uses your favorite JavaScript template engine to create HTML.
+* Multiline-strings make it feasible to use HanSON for larger template systems, e.g. to generate static HTML pages. 
+  Just write a small script that accepts HanSON and uses your favorite JavaScript template engine to create HTML.
 * You can, of course, extend your application to accept HanSON files.
 
 
@@ -99,19 +99,19 @@ Just want to use HanSON in your program, without including any libraries? Just u
 HanSON to JSON. The resulting JSON can then be read using JSON.parse().
 
 > function toJSON(input) {
-> 	return input.replace(/[a-zA-Z_$][\w_$]*|"""([^]*?(?:\\"""|[^"]""|[^"]"|\\\\|[^\\"]))"""|"""("?"?)"""|"([^"]|\\")*"|\/\*[^]*?\*\/|\/\/.*\n?/g, 
->						 function(s, tripleQuoted, tripleQuotedShort, singleQuoted) {
->		if (s.charAt(0) == '/')
->			return '';
->		else if (tripleQuoted != null || tripleQuotedShort != null) {
->			var t = tripleQuoted != null ? tripleQuoted : tripleQuotedShort;
->			return '"' + t.replace(/\\./g, function(s) { return s == '\\"' ? '"' : s; }).replace(/\n/g, '\\n').replace(/"/g, '\\"') + '"';
->		}
->		else if (singleQuoted != null)
->			return s;
->		else 
->			return '"' + s + '"';
->	});
+> 	return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|"""([^]*?(?:\\"""|[^"]""|[^"]"|\\\\|[^\\"]))"""|"""("?"?)"""|"(?:\\.|[^"])*"|\/\*[^]*?\*\/|\/\/.*\n?/g, 
+>	  function(s, identifier, tripleQuoted, tripleQuotedShort) {
+> 		if (s.charAt(0) == '/')
+> 			return '';
+> 		else if (identifier != null)
+> 				return '"' + identifier + '"';
+> 		else if (tripleQuoted != null || tripleQuotedShort != null) {
+> 			var t = tripleQuoted != null ? tripleQuoted : tripleQuotedShort;
+> 			return '"' + t.replace(/\\./g, function(s) { return s == '\\"' ? '"' : s; }).replace(/\n/g, '\\n').replace(/"/g, '\\"') + '"';
+> 		}
+> 		else 
+> 			return s;
+> 	 });
 > }
 
 

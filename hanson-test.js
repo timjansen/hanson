@@ -8,11 +8,14 @@ var hanson = require("./hanson.js");
 describe('toJSON()', function() {
 	var toJSON = hanson.toJSON;
 	it('does not touch regular JSON', function() {
-		var a = "[1,2, 3]";
-		assert.equal(toJSON(a), a);
-		
-		a = '{"a": "b", "c": ["a", "b\\nc"]}';
-		assert.equal(toJSON(a), a);
+		var a;
+		assert.equal(toJSON(a = "[1,2, 3]"), a);
+		assert.equal(toJSON(a = '[true, null, false, "null", ""]'), a);
+		assert.equal(toJSON(a = '"\""'), a);
+		assert.equal(toJSON(a = '"\\"'), a);
+		assert.equal(toJSON(a = '"\\\""'), a);
+		assert.equal(toJSON(a = '"\\t\\\\\\\""'), a);
+		assert.equal(toJSON(a = '{"a": "b", "c": ["a", "b\\nc"]}'), a);
  	});
 	
 	it('ignores singleline comments', function() {
@@ -72,9 +75,10 @@ describe('toJSON()', function() {
  	});
 	
 	it('mixed input', function() {
-		assert.equal(toJSON('{a: 1, """b"b""": c2$, /**/c:/*x*/d_, "f"://bla\n "g\\n\\t\\\\h"}//x'), 
-					        '{"a": 1, "b\\"b": "c2$", "c":"d_", "f": "g\\n\\t\\\\h"}');
+		assert.equal(toJSON('{a: 1, """b"b""": c2$, /**/c:/*x*/d_, d: [true, null], "e": false, "f"://bla\n "g\\n\\t\\\\h"}//x'), 
+					        '{"a": 1, "b\\"b": "c2$", "c":"d_", "d": [true, null], "e": false, "f": "g\\n\\t\\\\h"}');
  	});
+	
 	it('keeps lines', function() {
 		assert.equal(toJSON('["""x\n\ny""", 1,0\n,/*\na\nb\n\n*/2]', false), 
         					'["x\\n\\ny", 1,0\n,2]');
