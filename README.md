@@ -5,7 +5,7 @@ In Short
 ---------
 * HanSON is JSON with comments, multi-line strings and unquoted property names.
 * Comments use JavaScript syntax (//, /**/).
-* Multi-line strings are triple-quotes like in Python: they start and end with """.
+* Multi-line strings are triple-quoted like in Python: they start and end with """.
 * Property names do not require quotes if they are valid JavaScript identifiers.
 * Every JSON string is valid HanSON.
 * HanSON can easily be converted to real JSON. 
