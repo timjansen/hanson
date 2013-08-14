@@ -3,10 +3,10 @@ HanSON - JSON for Humans
 
 In Short
 ---------
-* HanSON is JSON with comments, multiline strings and unquoted object property names.
+* HanSON is JSON with comments, multi-line strings and unquoted property names.
 * Comments use JavaScript syntax (//, /**/).
 * Multi-line strings are triple-quotes like in Python: they start and end with """.
-* Object property names do not require quotes if they are valid JavaScript identifiers.
+* Property names do not require quotes if they are valid JavaScript identifiers.
 * Every JSON string is valid HanSON.
 * HanSON can easily be converted to real JSON. 
 
@@ -32,14 +32,14 @@ Example
 --------
 ```js
 {
-  listName: "Sesame Street Monsters", // listName follows identifier rules, no quotes needed
+  listName: "Sesame Street Monsters", // note that listName needs no quotes
   content: [
     {
       name: "Cookie Monster",
       /* Note the triple quotes and unescaped single quotes in the next string */
       background: """Cookie Monster used to be a
 monster that ate everything, especially cookies.
-These days he is forced to each "healthy" food."""
+These days he is forced to eat "healthy" food."""
     }, {
       name: "Herry Monster",
       background: """Herry Monster is a furry blue monster with a purple nose.
@@ -78,17 +78,23 @@ object, with the only difference being that hanson.parse() will accept HanSON.
 
 ```js
 var hanson = require('hanson');
-var obj = hanson.parse(jsonSrc);
+var obj = hanson.parse(hansonSrc);
 ```
  
 hanson.stringify() will currently write regular JSON and just invokes JSON.stringify(), but future versions may pretty-print 
 the output and use triple-quotes for multi-line strings instead of '\n'.
 
+There's also a toJSON() function that can convert your HanSON source into JSON:
+```js
+var hanson = require('hanson');
+var json = hanson.parse(hansonSrc);
+```
+
 
 
 How Can HanSON Help Me?
 --------------------------
-* If you have configuration or descriptor files (like package.json), you can write them using HanSON and convert them 
+* If you have configuration or descriptor files (like package.json), you can write them as HanSON and convert them 
   with the command line tool or the Grunt task.
 * Multi-line strings make it feasible to use JSON/HanSON for larger template systems, e.g. to generate static HTML pages. 
   Just write a small script that accepts HanSON and uses your favorite JavaScript template engine to create HTML.
@@ -99,25 +105,26 @@ How Can HanSON Help Me?
 
 Function to Convert HanSON
 ----------------------------
-Just want to use HanSON in your program, without including any libraries? Use to function to convert
-HanSON to JSON. The returned string is JSON that can then be read using JSON.parse().
+Want to use HanSON in your program, without including any libraries? Use this function to convert
+HanSON to JSON. It returns a JSON string that can be read using JSON.parse().
 
-> function toJSON(input) {
-> 	return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|"""([^]*?(?:\\"""|[^"]""|[^"]"|\\\\|[^\\"]))"""|"""("?"?)"""|"(?:\\.|[^"])*"|\/\*[^]*?\*\/|\/\/.*\n?/g, 
->	  function(s, identifier, tripleQuoted, tripleQuotedShort) {
-> 		if (s.charAt(0) == '/')
-> 			return '';
-> 		else if (identifier != null)
-> 				return '"' + identifier + '"';
-> 		else if (tripleQuoted != null || tripleQuotedShort != null) {
-> 			var t = tripleQuoted != null ? tripleQuoted : tripleQuotedShort;
-> 			return '"' + t.replace(/\\./g, function(s) { return s == '\\"' ? '"' : s; }).replace(/\n/g, '\\n').replace(/"/g, '\\"') + '"';
-> 		}
-> 		else 
-> 			return s;
-> 	 });
-> }
-
+```js
+function toJSON(input) {
+	return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|"""([^]*?(?:\\"""|[^"]""|[^"]"|\\\\|[^\\"]))"""|"""("?"?)"""|"(?:\\.|[^"])*"|\/\*[^]*?\*\/|\/\/.*\n?/g, 
+	  function(s, identifier, tripleQuoted, tripleQuotedShort) {
+		if (s.charAt(0) == '/')
+			return '';
+		else if (identifier != null)
+				return '"' + identifier + '"';
+		else if (tripleQuoted != null || tripleQuotedShort != null) {
+			var t = tripleQuoted != null ? tripleQuoted : tripleQuotedShort;
+			return '"' + t.replace(/\\./g, function(s) { return s == '\\"' ? '"' : s; }).replace(/\n/g, '\\n').replace(/"/g, '\\"') + '"';
+		}
+		else 
+			return s;
+	 });
+}
+```
 
 
 License
