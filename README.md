@@ -20,13 +20,13 @@ files are written in JSON, and often it is used as a simpler alternative to XML.
 larger JSON files by hand, you will notice some shortcomings: you need to quote all strings, even object keys; 
 you can not easily have strings with several lines; and you can not include comments. 
 
-HanSON is an extension of JSON that fixes those shortcomings with three simple additions to the JSON spec:
+HanSON is an extension of JSON that fixes those shortcomings with four simple additions to the JSON spec:
 * quotes for strings are optional if they follow JavaScript identifier rules.
 * you can alternatively use triple quotes for strings. A triple-quoted string may span several lines
   and you are not required to escape individual quote characters. Backslashes still
   need to be escaped, and all other backslash-escape sequences work like in regular JSON.
 * you can use JavaScript comments, both single line (//) and multi-line comments (/* */), in all places where JSON allows whitespace.
-* A comma after the last list element or object property will be ignored. 
+* Commas after the last list element or object property will be ignored. 
   
   
 
