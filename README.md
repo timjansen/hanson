@@ -5,7 +5,7 @@ In Short
 ---------
 * HanSON is JSON with comments, multi-line strings and unquoted property names.
 * Comments use JavaScript syntax (//, /**/).
-* Multi-line strings are triple-quoted like in Python: they start and end with """.
+* Supports backticks as quotes (``) for multi-line strings.
 * Property names do not require quotes if they are valid JavaScript identifiers.
 * Commas after the last list element or property will be ignored.
 * Every JSON string is valid HanSON.
@@ -22,9 +22,10 @@ you can not easily have strings with several lines; and you can not include comm
 
 HanSON is an extension of JSON that fixes those shortcomings with four simple additions to the JSON spec:
 * quotes for strings are optional if they follow JavaScript identifier rules.
-* you can alternatively use triple quotes for strings. A triple-quoted string may span several lines
-  and you are not required to escape individual quote characters. Backslashes still
-  need to be escaped, and all other backslash-escape sequences work like in regular JSON.
+* you can alternatively use backticks, as in ES6's template string literal, as quotes for strings. 
+  A backtick-quoted string may span several lines and you are not required to escape regular quote characters,
+  only backticks. Backslashes still need to be escaped, and all other backslash-escape sequences work like in 
+  regular JSON.
 * you can use JavaScript comments, both single line (//) and multi-line comments (/* */), in all places where JSON allows whitespace.
 * Commas after the last list element or object property will be ignored. 
   
@@ -38,14 +39,14 @@ Example HanSON
   content: [
     {
       name: "Cookie Monster",
-      /* Note the triple quotes and unescaped single quotes in the next string */
-      background: """Cookie Monster used to be a
+      /* Note the template quotes and unescaped regular quotes in the next string */
+      background: `Cookie Monster used to be a
 monster that ate everything, especially cookies.
-These days he is forced to eat "healthy" food."""
+These days he is forced to eat "healthy" food.`
     }, {
       name: "Herry Monster",
-      background: """Herry Monster is a furry blue monster with a purple nose.
-He's mostly retired today."""
+      background: `Herry Monster is a furry blue monster with a purple nose.
+He's mostly retired today.`
     },    // don't worry, the trailing comma will be ignored
    ]
 }
@@ -112,21 +113,25 @@ HanSON to JSON. It returns a JSON string that can be read using JSON.parse().
 
 ```js
 function toJSON(input) {
-	return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|"""([^]*?(?:\\"""|[^"]""|[^"]"|\\\\|[^\\"]))"""|"""("?"?)"""|"(?:\\.|[^"])*"|(,)(?=\s*[}\]])|\/\*[^]*?\*\/|\/\/.*\n?/g, 
- 	  function(s, identifier, tripleQuoted, tripleQuotedShort, lonelyComma) {
+	return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|`((?:\\.|[^`])*)`|"(?:\\.|[^"])*"|(,)(?=\s*[}\]])|\/\*[^]*?\*\/|\/\/.*\n?/g, 
+						 function(s, identifier, multilineQuote, lonelyComma) {
 		if (s.charAt(0) == '/' || lonelyComma)
 			return '';
 		else if (identifier != null)
 				return '"' + identifier + '"';
-		else if (tripleQuoted != null || tripleQuotedShort != null) {
-			var t = tripleQuoted != null ? tripleQuoted : tripleQuotedShort;
-			return '"' + t.replace(/\\./g, function(s) { return s == '\\"' ? '"' : s; }).replace(/\n/g, '\\n').replace(/"/g, '\\"') + '"';
-		}
+		else if (multilineQuote != null)
+			return '"' + multilineQuote.replace(/\\./g, function(r) { return r == '\\"' ? '"' : (r == '\\`' ? '`' : r); })
+			                           .replace(/\n/g, '\\n').replace(/"/g, '\\"') +  '"';
 		else 
 			return s;
-	 });
+	});
 }
 ```
+
+Changes
+--------
+August 14, 2013: First release (0.1.0)
+August 15, 2013: Replaced triple-quotes with ES6-template quotes (``)
 
 
 License
