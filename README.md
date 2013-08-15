@@ -131,7 +131,7 @@ function toJSON(input) {
 Changes
 --------
 August 14, 2013: First release (0.1.0)
-August 15, 2013: Replaced triple-quotes with ES6-template quotes (``)
+August 15, 2013: Replaced triple-quotes with backticks (1.0.0, backward-incompatible change)
 
 
 License
