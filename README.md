@@ -115,18 +115,26 @@ HanSON to JSON. It returns a JSON string that can be read using JSON.parse().
 
 ```js
 function toJSON(input) {
-	return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|`((?:\\.|[^`])*)`|"(?:\\.|[^"])*"|(,)(?=\s*[}\]])|\/\*[^]*?\*\/|\/\/.*\n?/g, 
-						 function(s, identifier, multilineQuote, lonelyComma) {
-		if (s.charAt(0) == '/' || lonelyComma)
-			return '';
-		else if (identifier != null)
+		return input.replace(/`(?:\\.|[^`])*`|'(?:\\.|[^'])*'|"(?:\\.|[^"])*"|\/\*[^]*?\*\/|\/\/.*\n?/g, // pass 1: remove comments 
+							 function(s, identifier, multilineQuote, singleQuote, lonelyComma) {
+			if (s.charAt(0) == '/')
+				return '';
+			else  
+				return s;
+		})
+		.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|`((?:\\.|[^`])*)`|'((?:\\.|[^'])*)'|"(?:\\.|[^"])*"|(,)(?=\s*[}\]])/g, // pass 2: requote 
+							 function(s, identifier, multilineQuote, singleQuote, lonelyComma) {
+			if (lonelyComma)
+				return '';
+			else if (identifier != null)
 				return '"' + identifier + '"';
-		else if (multilineQuote != null)
-			return '"' + multilineQuote.replace(/\\./g, function(r) { return r == '\\"' ? '"' : (r == '\\`' ? '`' : r); })
-			                           .replace(/\n/g, '\\n').replace(/"/g, '\\"') +  '"';
-		else 
-			return s;
-	});
+			else if (multilineQuote != null)
+				return '"' + multilineQuote.replace(/\\./g, function(r) { return r == '\\"' ? '"' : (r == '\\`' ? '`' : r); }).replace(/\n/g, '\\n').replace(/"/g, '\\"') + '"';
+			else if (singleQuote != null)
+				return '"' + singleQuote.replace(/\\./g, function(r) { return r == '\\"' ? '"' : (r == "\\'" ? "'" : r); }).replace(/"/g, '\\"') + '"';
+			else 
+				return s;
+		});
 }
 ```
 
