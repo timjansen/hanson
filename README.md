@@ -116,7 +116,7 @@ HanSON to JSON. It returns a JSON string that can be read using JSON.parse().
 ```js
 function toJSON(input) {
 		return input.replace(/`(?:\\.|[^`])*`|'(?:\\.|[^'])*'|"(?:\\.|[^"])*"|\/\*[^]*?\*\/|\/\/.*\n?/g, // pass 1: remove comments 
-							 function(s, identifier, multilineQuote, singleQuote, lonelyComma) {
+							 function(s) {
 			if (s.charAt(0) == '/')
 				return '';
 			else  

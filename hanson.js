@@ -44,7 +44,7 @@
 	// line numbers in error messages will still make sense.
 	function toJSON(input, keepLineNumbers) {
 		return input.replace(/`(?:\\.|[^`])*`|'(?:\\.|[^'])*'|"(?:\\.|[^"])*"|\/\*[^]*?\*\/|\/\/.*\n?/g, // pass 1: remove comments 
-							 function(s, identifier, multilineQuote, singleQuote, lonelyComma) {
+							 function(s) {
 			if (s.charAt(0) == '/')
 				return keepLineNumbers ? extractLineFeeds(s) : '';
 			else  
