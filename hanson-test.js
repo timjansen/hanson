@@ -52,6 +52,14 @@ describe('toJSON()', function() {
 					      '{"a": 1, "b": "c2$", "c": "d_", "f": "g\\n\\t\\\\h"}');
  	});
 
+	it('supports single-quoted strings', function() {
+		assert.equal(toJSON("''"), '""');
+		assert.equal(toJSON("'a'"), '"a"');
+		assert.equal(toJSON("'\"'"), '"\\""');
+		assert.equal(toJSON("'\\''"), '"\'"');
+		assert.equal(toJSON("'\\\\'"), '"\\\\"');
+ 	});
+	
 	it('supports template-quoted strings', function() {
 		assert.equal(toJSON('``'), '""');
 		assert.equal(toJSON('`a`'), '"a"');
@@ -66,7 +74,7 @@ describe('toJSON()', function() {
  	});
 	
 	it('mixed input', function() {
-		assert.equal(toJSON('{a: 1, `b"b`: c2$, /**/c:/*x*/d_, d: [true, null,], "e": false, "f"://bla\n "g\\n\\t\\\\h" , }//x'), 
+		assert.equal(toJSON('{a: 1, `b"b`: c2$, /**/c:/*x*/d_, d: [true, null,], \'e\': false, "f"://bla\n "g\\n\\t\\\\h" , }//x'), 
 					        '{"a": 1, "b\\"b": "c2$", "c":"d_", "d": [true, null], "e": false, "f": "g\\n\\t\\\\h"  }');
  	});
 	

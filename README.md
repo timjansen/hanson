@@ -6,6 +6,7 @@ In Short
 * HanSON is JSON with comments, multi-line strings and unquoted property names.
 * Comments use JavaScript syntax (//, /**/).
 * Supports backticks as quotes (``) for multi-line strings.
+* You can use either double-quotes ("") or single-quotes ('') for single-line strings.
 * Property names do not require quotes if they are valid JavaScript identifiers.
 * Commas after the last list element or property will be ignored.
 * Every JSON string is valid HanSON.
@@ -26,6 +27,7 @@ HanSON is an extension of JSON that fixes those shortcomings with four simple ad
   A backtick-quoted string may span several lines and you are not required to escape regular quote characters,
   only backticks. Backslashes still need to be escaped, and all other backslash-escape sequences work like in 
   regular JSON.
+* for single-line strings, single quotes ('') are supported in addition to double quotes ("")
 * you can use JavaScript comments, both single line (//) and multi-line comments (/* */), in all places where JSON allows whitespace.
 * Commas after the last list element or object property will be ignored. 
   

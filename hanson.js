@@ -43,8 +43,8 @@
 	// if keepLineNumbers is set, toJSON() tried not to modify line numbers, so a JSON parser's
 	// line numbers in error messages will still make sense.
 	function toJSON(input, keepLineNumbers) {
-		return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|`((?:\\.|[^`])*)`|"(?:\\.|[^"])*"|(,)(?=\s*[}\]])|\/\*[^]*?\*\/|\/\/.*\n?/g, 
-							 function(s, identifier, multilineQuote, lonelyComma) {
+		return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|`((?:\\.|[^`])*)`|'((?:\\.|[^'])*)'|"(?:\\.|[^"])*"|(,)(?=\s*[}\]])|\/\*[^]*?\*\/|\/\/.*\n?/g, 
+							 function(s, identifier, multilineQuote, singleQuote, lonelyComma) {
 			if (s.charAt(0) == '/' || lonelyComma)
 				return keepLineNumbers ? extractLineFeeds(s) : '';
 			else if (identifier != null)
@@ -52,6 +52,8 @@
 			else if (multilineQuote != null)
 				return '"' + multilineQuote.replace(/\\./g, function(r) { return r == '\\"' ? '"' : (r == '\\`' ? '`' : r); }).replace(/\n/g, '\\n').replace(/"/g, '\\"') +
 				       '"' + (keepLineNumbers ? extractLineFeeds(multilineQuote) : '');
+			else if (singleQuote != null)
+				return '"' + singleQuote.replace(/\\./g, function(r) { return r == '\\"' ? '"' : (r == "\\'" ? "'" : r); }).replace(/"/g, '\\"') + '"';
 			else 
 				return s;
 		});
