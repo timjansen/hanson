@@ -23,6 +23,8 @@ describe('toJSON()', function() {
 		assert.equal(toJSON("[1, 2, 3, ]"), "[1, 2, 3 ]");
 		assert.equal(toJSON("[1, 2, 3,]"), "[1, 2, 3]");
 		assert.equal(toJSON("[1, 2, 3,\n]"), "[1, 2, 3\n]");
+		assert.equal(toJSON("[1, 2, 3, /*x*/]"), "[1, 2, 3 ]");
+		assert.equal(toJSON("[1, 2, 3,//\n]"), "[1, 2, 3]");
 		assert.equal(toJSON('{"a":1, "b":2,}'), '{"a":1, "b":2}');
  	});
 	

@@ -43,10 +43,17 @@
 	// if keepLineNumbers is set, toJSON() tried not to modify line numbers, so a JSON parser's
 	// line numbers in error messages will still make sense.
 	function toJSON(input, keepLineNumbers) {
-		return input.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|`((?:\\.|[^`])*)`|'((?:\\.|[^'])*)'|"(?:\\.|[^"])*"|(,)(?=\s*[}\]])|\/\*[^]*?\*\/|\/\/.*\n?/g, 
+		return input.replace(/`(?:\\.|[^`])*`|'(?:\\.|[^'])*'|"(?:\\.|[^"])*"|\/\*[^]*?\*\/|\/\/.*\n?/g, // pass 1: remove comments 
 							 function(s, identifier, multilineQuote, singleQuote, lonelyComma) {
-			if (s.charAt(0) == '/' || lonelyComma)
+			if (s.charAt(0) == '/')
 				return keepLineNumbers ? extractLineFeeds(s) : '';
+			else  
+				return s;
+		})
+		.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|`((?:\\.|[^`])*)`|'((?:\\.|[^'])*)'|"(?:\\.|[^"])*"|(,)(?=\s*[}\]])/g, // pass 2: requote 
+							 function(s, identifier, multilineQuote, singleQuote, lonelyComma) {
+			if (lonelyComma)
+				return '';
 			else if (identifier != null)
 					return '"' + identifier + '"';
 			else if (multilineQuote != null)
