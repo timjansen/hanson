@@ -69,6 +69,7 @@ describe('toJSON()', function() {
 		assert.equal(toJSON('`\\`\\``'), '"``"');
 		assert.equal(toJSON('`\\\\`'), '"\\\\"');
 		assert.equal(toJSON('`\nABC\n`'), '"\\nABC\\n"');
+		assert.equal(toJSON('`\n\rABC\n\r`'), '"\\n\\rABC\\n\\r"');
 		assert.equal(toJSON('`\\"""`'), '"\\"\\"\\""');
 		assert.equal(toJSON('`g\n\t\\t\\\\h`'), '"g\\n\t\\t\\\\h"');
 		assert.equal(toJSON('{`a`: 1, b: `c2"\n$`, c: d_, `f`: `g\n\t\\t\\\\h`}'), 
