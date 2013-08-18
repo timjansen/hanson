@@ -1,6 +1,6 @@
 {
   "name": "hanson",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "HanSON is JSON with multiline strings and comments. Includes parser and converter.",
   "main": "hanson.js",
   "scripts": {
