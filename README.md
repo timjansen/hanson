@@ -115,6 +115,10 @@ HanSON to JSON. It returns a JSON string that can be read using JSON.parse().
 
 ```js
 function toJSON(input) {
+		var UNESCAPE_MAP = { '\\"': '"', "\\`": "`", "\\'": "'" };
+		var ML_ESCAPE_MAP = {'\n': '\\n', "\r": '\\r', "\t": '\\t', '"': '\\"'};
+		function unescapeQuotes(r) { return UNESCAPE_MAP[r] || r; }
+		
 		return input.replace(/`(?:\\.|[^`])*`|'(?:\\.|[^'])*'|"(?:\\.|[^"])*"|\/\*[^]*?\*\/|\/\/.*\n?/g, // pass 1: remove comments 
 							 function(s) {
 			if (s.charAt(0) == '/')
@@ -127,11 +131,11 @@ function toJSON(input) {
 			if (lonelyComma)
 				return '';
 			else if (identifier != null)
-				return '"' + identifier + '"';
+					return '"' + identifier + '"';
 			else if (multilineQuote != null)
-				return '"' + multilineQuote.replace(/\\./g, function(r) { return r == '\\"' ? '"' : (r == '\\`' ? '`' : r); }).replace(/\n/g, '\\n').replace(/"/g, '\\"') + '"';
+				return '"' + multilineQuote.replace(/\\./g, unescapeQuotes).replace(/[\n\r\t"]/g, function(r) { return ML_ESCAPE_MAP[r]; }) + '"';
 			else if (singleQuote != null)
-				return '"' + singleQuote.replace(/\\./g, function(r) { return r == '\\"' ? '"' : (r == "\\'" ? "'" : r); }).replace(/"/g, '\\"') + '"';
+				return '"' + singleQuote.replace(/\\./g, unescapeQuotes).replace(/"/g, '\\"') + '"';
 			else 
 				return s;
 		});
@@ -143,7 +147,7 @@ Changes
 * August 14, 2013: First release (0.1.0)
 * August 15, 2013: Replaced triple-quotes with backticks (1.0.0, backward-incompatible change)
 * August 19, 2013: Added support for single-quotes (1.1.0)
-* August 19, 2013: Fixed removing commas followed by comments, support \r in multiline quotes (1.1.1)
+* August 19, 2013: Fixed removing commas followed by comments, support \r and \t in multiline quotes (1.1.1)
 
 License
 --------

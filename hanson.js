@@ -43,8 +43,9 @@
 	// if keepLineNumbers is set, toJSON() tried not to modify line numbers, so a JSON parser's
 	// line numbers in error messages will still make sense.
 	function toJSON(input, keepLineNumbers) {
-		var ML_UNESCAPE_MAP = { '\\"': '"', "\\`": "`" };
-		var ML_ESCAPE_MAP = {'\n': '\\n', "\r": '\\r', '"': '\\"'};
+		var UNESCAPE_MAP = { '\\"': '"', "\\`": "`", "\\'": "'" };
+		var ML_ESCAPE_MAP = {'\n': '\\n', "\r": '\\r', "\t": '\\t', '"': '\\"'};
+		function unescapeQuotes(r) { return UNESCAPE_MAP[r] || r; }
 		
 		return input.replace(/`(?:\\.|[^`])*`|'(?:\\.|[^'])*'|"(?:\\.|[^"])*"|\/\*[^]*?\*\/|\/\/.*\n?/g, // pass 1: remove comments 
 							 function(s) {
@@ -60,10 +61,10 @@
 			else if (identifier != null)
 					return '"' + identifier + '"';
 			else if (multilineQuote != null)
-				return '"' + multilineQuote.replace(/\\./g, function(r) { return ML_UNESCAPE_MAP[r] || r; }).replace(/[\n\r"]/g, function(r) { return ML_ESCAPE_MAP[r] || r; }) +
+				return '"' + multilineQuote.replace(/\\./g, unescapeQuotes).replace(/[\n\r\t"]/g, function(r) { return ML_ESCAPE_MAP[r]; }) +
 				       '"' + (keepLineNumbers ? extractLineFeeds(multilineQuote) : '');
 			else if (singleQuote != null)
-				return '"' + singleQuote.replace(/\\./g, function(r) { return r == '\\"' ? '"' : (r == "\\'" ? "'" : r); }).replace(/"/g, '\\"') + '"';
+				return '"' + singleQuote.replace(/\\./g, unescapeQuotes).replace(/"/g, '\\"') + '"';
 			else 
 				return s;
 		});
