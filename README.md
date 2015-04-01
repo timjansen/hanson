@@ -76,6 +76,13 @@ The Grunt plugin <a href="https://github.com/timjansen/grunt-hanson-plugin">grun
 HanSON files to JSON. More about it in its own <a href="https://github.com/timjansen/grunt-hanson-plugin">repository</a>.
 
 
+Webpack loader to Convert HanSON to JSON
+--------------------------------------
+
+The Webpack loader [hson-loader](https://github.com/kentcdodds/hson-loader) can help you converting HanSON files to JSON. More
+about it in its own [repository](https://github.com/kentcdodds/hson-loader).
+
+
 Reading HanSON in JavaScript
 -------------------------------
 *hanson.js* is a simple library for Node.js that provides you with a HanSON object which works pretty much like the *JSON*
