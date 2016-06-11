@@ -4,7 +4,7 @@
   "description": "HanSON is JSON with multiline strings and comments. Includes parser and converter.",
   "main": "hanson.js",
   "scripts": {
-    "test": "mocha hanson-test.js"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   ],
   "readmeFilename": "README.md",
   "devDependencies": {
+    "chai": "^3.5.0",
     "mocha": "~1.17.1"
   },
   "bin": {
