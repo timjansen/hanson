@@ -1,5 +1,5 @@
 /*
- * hanson-test.js - Tests for hanson.js # parse()
+ * test/parse.js - Tests for hanson.js # parse()
  * https://github.com/timjansen/handson
  */
 var expect = require('chai').expect;

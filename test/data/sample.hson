@@ -1,0 +1,16 @@
+{
+  listName: "Sesame Street Monsters", // note that listName needs no quotes
+  content: [
+    {
+      name: "Cookie Monster",
+      /* Note the template quotes and unescaped regular quotes in the next string */
+      background: `Cookie Monster used to be a
+monster that ate everything, especially cookies.
+These days he is forced to eat "healthy" food.`
+    }, {
+      name: "Herry Monster",
+      background: `Herry Monster is a furry blue monster with a purple nose.
+He's mostly retired today.`
+    },    // don't worry, the trailing comma will be ignored
+   ]
+}

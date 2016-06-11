@@ -27,16 +27,22 @@ var args = process.argv.slice(2);
 var keepLineNumbers = false;
 var multiFile = false;
 
-while (/^-/.test(args[0])) {
-	var a = args.shift();
-	if (/^--?h(elp)?$/.test(a))
-		printHelp();
-	else if (a == '-l')
-		keepLineNumbers = true;
-	else if (a == '-m')
-		multiFile = true;
-	else
-		printHelp("Unknown option: " + a);
+// Process each switch but ignore '-' by itself as it means STDIN / STDOUT
+var examineOffset = 0;
+while (/^-/.test(args[examineOffset])) {
+	if (args[0] == '-') {
+		examineOffset++;
+	} else {
+		var a = args.shift();
+		if (/^--?h(elp)?$/.test(a))
+			printHelp();
+		else if (a == '-l')
+			keepLineNumbers = true;
+		else if (a == '-m')
+			multiFile = true;
+		else if (a != '-')
+			printHelp("Unknown option: " + a);
+	}
 }
 
 if (multiFile) {
@@ -55,7 +61,7 @@ else {
 	if (args.length > 2)
 		error("Too many arguments - need input file and output file (or forgot -m option?)");
 
-	if (!fs.existsSync(args[0]))
+	if (args[0] != '-' && !fs.existsSync(args[0]))
 		error("File not found: "+ args[0]);
 	
 	convert(args[0], args[1]);
@@ -67,8 +73,28 @@ function getOutputFileName(file) {
 }
 
 function convert(inputFile, outputFile) {
-	var src = fs.readFileSync(inputFile).toString();
-	fs.writeFileSync(outputFile, hanson.toJSON(src, keepLineNumbers));
+	var src;
+	if (inputFile == '-') {
+		src = '';
+		process.stdin.resume();
+		process.stdin.on('data', function(data) {
+			src += data;
+		});
+		process.stdin.on('end', function(data) {
+			if (outputFile == '-') {
+				process.stdout.write(hanson.toJSON(src, keepLineNumbers));
+			} else {
+				fs.writeFileSync(outputFile, hanson.toJSON(src, keepLineNumbers));
+			}
+		});
+	} else {
+		src = fs.readFileSync(inputFile, 'utf-8');
+		if (outputFile == '-') {
+			process.stdout.write(hanson.toJSON(src, keepLineNumbers));
+		} else {
+			fs.writeFileSync(outputFile, hanson.toJSON(src, keepLineNumbers));
+		}
+	}
 }
 
 function error(msg) {

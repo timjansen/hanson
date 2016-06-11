@@ -1,5 +1,5 @@
 /*
- * hanson-test.js - Tests for hanson.js # toJSON()
+ * test/toJSON.js - Tests for hanson.js # toJSON()
  * https://github.com/timjansen/handson
  */
 var expect = require('chai').expect;

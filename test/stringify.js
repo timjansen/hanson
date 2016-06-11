@@ -1,5 +1,5 @@
 /*
- * hanson-test.js - Tests for hanson.js # stringify()
+ * test/stringify.js - Tests for hanson.js # stringify()
  * https://github.com/timjansen/handson
  */
 var expect = require('chai').expect;
