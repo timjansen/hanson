@@ -40,6 +40,8 @@ while (/^-/.test(args[examineOffset])) {
 			keepLineNumbers = true;
 		else if (a == '-m')
 			multiFile = true;
+		else if (a == '-p')
+			args = ['-', '-'];
 		else if (a != '-')
 			printHelp("Unknown option: " + a);
 	}
@@ -110,9 +112,13 @@ function printHelp(extraMsg) {
 	console.log('Hanson converts HanSON files into JSON files.');
 	console.log('Syntax: hanson [-l] inputFile.hson outputFile.json');
 	console.log('        hanson [-l] -m inputFile1.hson [inputFile2.hson [inputFile3.hson...]]');
+	console.log('        hanson [-l] -p');
+	console.log();
+	console.log('A single hyphan ("-") can be used as input and/or output file names to refer to STDIN / STDOUT');
 	console.log();
 	console.log('Options: -l : keep line numbers in output files (adds empty lines)');
 	console.log('         -m : multi-input files. Will write .json file for each.');
+	console.log('         -p : pipe mode. Reads data from STDIN and outputs to STDOUT. Same as \'hanson - -\'');
 	console.log();
 	process.exit(1);
 }
