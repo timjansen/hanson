@@ -11,8 +11,20 @@ var fs = require('fs');
 process.chdir(__dirname + '/..');
 
 describe('command', function() {
+
+	// Clean up temporary file
 	after(function(done) {
 		fs.unlink('output.json', done);
+	});
+
+	// Verify object is correct
+	var output;
+	afterEach(function() {
+		expect(output).to.have.property('listName', 'Sesame Street Monsters');
+		expect(output).to.have.property('content');
+		expect(output.content).to.be.an.array;
+		expect(output.content[0]).to.have.property('name', 'Cookie Monster');
+		expect(output.content[1]).to.have.property('name', 'Herry Monster');
 	});
 
 	it('accepts file -> file', function(done) {
@@ -22,13 +34,7 @@ describe('command', function() {
 			expect(stdout).to.be.not.ok;
 			expect(stderr).to.be.not.ok;
 
-			var obj = JSON.parse(fs.readFileSync('output.json', 'utf-8'));
-			expect(obj).to.have.property('listName', 'Sesame Street Monsters');
-			expect(obj).to.have.property('content');
-			expect(obj.content).to.be.an.array;
-			expect(obj.content[0]).to.have.property('name', 'Cookie Monster');
-			expect(obj.content[1]).to.have.property('name', 'Herry Monster');
-
+			output = JSON.parse(fs.readFileSync('output.json', 'utf-8'));
 			done();
 		});
 	});
@@ -40,13 +46,7 @@ describe('command', function() {
 			expect(stdout).to.be.not.ok;
 			expect(stderr).to.be.not.ok;
 
-			var obj = JSON.parse(fs.readFileSync('output.json', 'utf-8'));
-			expect(obj).to.have.property('listName', 'Sesame Street Monsters');
-			expect(obj).to.have.property('content');
-			expect(obj.content).to.be.an.array;
-			expect(obj.content[0]).to.have.property('name', 'Cookie Monster');
-			expect(obj.content[1]).to.have.property('name', 'Herry Monster');
-
+			output = JSON.parse(fs.readFileSync('output.json', 'utf-8'));
 			done();
 		});
 	});
@@ -58,13 +58,7 @@ describe('command', function() {
 			expect(stdout).to.be.not.ok;
 			expect(stderr).to.be.not.ok;
 
-			var obj = JSON.parse(fs.readFileSync('output.json', 'utf-8'));
-			expect(obj).to.have.property('listName', 'Sesame Street Monsters');
-			expect(obj).to.have.property('content');
-			expect(obj.content).to.be.an.array;
-			expect(obj.content[0]).to.have.property('name', 'Cookie Monster');
-			expect(obj.content[1]).to.have.property('name', 'Herry Monster');
-
+			output = JSON.parse(fs.readFileSync('output.json', 'utf-8'));
 			done();
 		});
 	});
@@ -76,13 +70,19 @@ describe('command', function() {
 			expect(stdout).to.be.not.ok;
 			expect(stderr).to.be.not.ok;
 
-			var obj = JSON.parse(fs.readFileSync('output.json', 'utf-8'));
-			expect(obj).to.have.property('listName', 'Sesame Street Monsters');
-			expect(obj).to.have.property('content');
-			expect(obj.content).to.be.an.array;
-			expect(obj.content[0]).to.have.property('name', 'Cookie Monster');
-			expect(obj.content[1]).to.have.property('name', 'Herry Monster');
+			output = JSON.parse(fs.readFileSync('output.json', 'utf-8'));
+			done();
+		});
+	});
 
+	it('accepts pipemode (-p)', function(done) {
+		exec('node hansoncmd.js -p <test/data/sample.hson >output.json', function(err, stdout, stderr) {
+			expect(err).to.be.not.ok;
+			expect(stdout).to.be.a.string;
+			expect(stdout).to.be.not.ok;
+			expect(stderr).to.be.not.ok;
+
+			output = JSON.parse(fs.readFileSync('output.json', 'utf-8'));
 			done();
 		});
 	});
