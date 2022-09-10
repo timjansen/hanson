@@ -1,6 +1,8 @@
 HanSON - JSON for Humans
 ========================
 
+*Please note (September '22)*: This project is quite old and I would suggest you check out JSON5 instead of this project. 
+
 In Short
 ---------
 * HanSON is JSON with comments, multi-line strings and unquoted property names.
