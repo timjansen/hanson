@@ -54,10 +54,12 @@
 			else  
 				return s;
 		})
-		.replace(/(?:true|false|null)(?=[^\w_$]|$)|([a-zA-Z_$][\w_$]*)|`((?:\\.|[^`])*)`|'((?:\\.|[^'])*)'|"(?:\\.|[^"])*"|(,)(?=\s*[}\]])/g, // pass 2: requote 
-							 function(s, identifier, multilineQuote, singleQuote, lonelyComma) {
+		.replace(/(?:true|false|null)(?=[^\w_$]|$)|(-?\d+(?:\.?\d+)?(?:e-?\d+)?)|([a-zA-Z_$][\w_$]*)|`((?:\\.|[^`])*)`|'((?:\\.|[^'])*)'|"(?:\\.|[^"])*"|(,)(?=\s*[}\]])/g, // pass 2: requote
+							 function(s, number, identifier, multilineQuote, singleQuote, lonelyComma) {
 			if (lonelyComma)
 				return '';
+			else if (number)
+				return number;
 			else if (identifier != null)
 					return '"' + identifier + '"';
 			else if (multilineQuote != null)
